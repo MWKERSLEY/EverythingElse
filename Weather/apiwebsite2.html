@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Weather</title>
+    </head>
+    <body>
+        <h1>Weather</h1>
+        <h2>City</h2>
+        <input id="city" value="London"/>
+        <button id="getJourney">The Weather is:</button>
+        <div id="weatherC"></div>
+    </body>
+    <script>
+        var place = document.getElementById('city').value;
+        document.getElementById('getJourney').addEventListener('click', function() {
+            place = document.getElementById('city').value;
+            
+        
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                console.log(xhr);
+  /*              if (xhr.readyState == 4 && xhr.status == 200) {
+
+                    myData = JSON.parse(xhr.responseText);
+                    console.log(myData);
+
+                    document.getElementById('weatherC').innerHTML=xhr.weather[0].description;
+                }*/
+            }
+
+            //var link = "http://samples.openweathermap.org/data/2.5/forecast?q="+place+"&appid=b1b15e88fa797225412429c1c50c122a1";
+            var link = "api.openweathermap.org/data/2.5/weather?q="+place+"&appid=8c6b181a69525b03fc4ef84ed5ba34a6";
+            xhr.open("GET", link, true);
+            xhr.send();
+            
+            
+        }, false);
+        
+        
+        
+    </script>
+</html>

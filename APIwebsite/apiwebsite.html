@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="stylesheet.css">
+        <title>Get Me To Just IT</title>
+    </head>
+    <body>
+        <h1>TFL</h1>
+        <h2>Start From</h2>
+        <input id="place1" value="CR0 7DF"/>
+        <h2>Go To</h2>
+        <input id="place2" value="EC3N 1LS"/>
+        <button id="getJourney">Get Journey</button><button id="switch">Switch Directions</button>
+        <h2>Journey</h2>
+        <button class="routeChange" id="route1">Route 1</button>
+        <button class="routeChange" id="route2">Route 2</button>
+        <button class="routeChange" id="route3">Route 3</button>
+        <div id="journey"></div>
+        <h2>Map</h2>
+        <iframe id="googleMaps"></iframe>
+    </body>
+    <script src="myScript.js"></script>
+    <script>
+       function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else { 
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            start=position.coords.latitude+","+ position.coords.longitude;
+        }
+        
+        
+        
+        
+        
+        document.getElementById('switch').addEventListener('click', function() {
+            p1val = place1.value;
+            p2val = place2.value;
+            place1.value = p2val;
+            place2.value = p1val;
+            console.log("wefqwgeqg");
+        });
+        var optionNumber;
+            
+        //googlemaps
+        var start = "CR07DF";
+        var end = "EC3N1LS";
+        var initial = true;
+                
+        var myData = new Object;
+
+        function getRoute1() {
+            optionNumber = 0;
+            getDirections();
+        }
+
+        function getRoute2() {
+            optionNumber = 1;
+            getDirections();
+        }
+
+        function getRoute3() {
+            optionNumber = 2;
+            getDirections();
+        }
+
+        function getDirections() {
+            directionsDiv = document.getElementById('journey');
+            directionsDiv.innerHTML="";
+            for (var j = 0;j<myData.journeys[optionNumber].legs.length;j++)
+            {
+                directionsDiv.innerHTML+= (j+1)+". "+myData.journeys[optionNumber].legs[j].instruction.detailed+"<br>";
+            }
+        }
+        
+        newJourney = document.getElementById('getJourney');
+        newJourney.addEventListener('click', getNewJourney, false);
+        
+        function getNewJourney() {
+            if(!initial) {
+                start = document.getElementById('place1').value;
+                end = document.getElementById('place2').value;
+            }
+            else {
+                initial=false;
+            }
+            
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+
+                    myData = JSON.parse(xhr.responseText);
+                    console.log(myData);
+
+                    var optionButton1 = document.getElementById('route1'); optionButton1.addEventListener('click', getRoute1, false);
+
+                    var optionButton2 = document.getElementById('route2'); optionButton2.addEventListener('click', getRoute2, false);
+
+                    var optionButton3 = document.getElementById('route3'); optionButton3.addEventListener('click', getRoute3, false);
+                    
+                } else {
+                    alert("Error connecting to data! Try again later.");
+                }
+                document.getElementById("googleMaps").style.display = "block";
+
+                document.getElementById("googleMaps").setAttribute("src", "https://www.google.com/maps/embed/v1/directions?key=AIzaSyDqwEMrYspWHOIjkw2EIX9vGwpb8IsL_o8&origin="+start+"&destination="+end+"&mode=transit");
+
+                optionNumber = 0;
+                getRoute1();
+            }
+
+            xhr.open("GET", "https://api.tfl.gov.uk/journey/journeyresults/"+start+"/to/"+end, true);
+            xhr.send();
+        }
+        getLocation();
+        getNewJourney();
+    </script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqwEMrYspWHOIjkw2EIX9vGwpb8IsL_o8&callback=initMap"
+    async defer></script>-->
+</html>
