@@ -20,17 +20,18 @@
             var xhr = new XMLHttpRequest();
             xhr.onload = function() {
                 console.log(xhr);
-  /*              if (xhr.readyState == 4 && xhr.status == 200) {
+                if (xhr.readyState == 4 && xhr.status == 200) {
 
                     myData = JSON.parse(xhr.responseText);
                     console.log(myData);
 
-                    document.getElementById('weatherC').innerHTML=xhr.weather[0].description;
-                }*/
+                    document.getElementById('weatherC').innerHTML=myData.weather[0].description;
+                }
+                console.log(myData);
             }
 
             //var link = "http://samples.openweathermap.org/data/2.5/forecast?q="+place+"&appid=b1b15e88fa797225412429c1c50c122a1";
-            var link = "api.openweathermap.org/data/2.5/weather?q="+place+"&appid=8c6b181a69525b03fc4ef84ed5ba34a6";
+            var link = "http://api.openweathermap.org/data/2.5/weather?q="+place+"&appid=8c6b181a69525b03fc4ef84ed5ba34a6";
             xhr.open("GET", link, true);
             xhr.send();
             
